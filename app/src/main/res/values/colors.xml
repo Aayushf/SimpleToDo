@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorFab">#FFB300</color>
+    <color name="tomato">#D50000</color>
+    <color name="tangerine">#F4511E</color>
+    <color name="banana">#F6BF26</color>
+    <color name="basil">#0B8043</color>
+    <color name="sage">#33B679</color>
+    <color name="peacock">#039BE5</color>
+    <color name="blueberry">#3F51B5</color>
+    <color name="lavender">#7986CB</color>
+    <color name="grape">#8E24AA</color>
+    <color name="flamingo">#E67C73</color>
+    <color name="graphite">#616161</color>
+    <color name="defaultcolor">#FFFFFF</color>
+
+
+
 </resources>

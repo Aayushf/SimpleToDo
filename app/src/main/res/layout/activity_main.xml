@@ -13,7 +13,9 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        >
+
 
         <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,7 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            tools:context="com.simpletodo.aayushf.simpletodo.ScrollingActivity">
+            tools:context="com.simpletodo.aayushf.simpletodo.ScrollingActivity"
+            android:id="@+id/cl">
+
+
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/app_bar"
@@ -48,6 +53,7 @@
                 </android.support.design.widget.CollapsingToolbarLayout>
             </android.support.design.widget.AppBarLayout>
 
+
             <include layout="@layout/content_scrolling" />
 
             <android.support.design.widget.FloatingActionButton
@@ -60,6 +66,7 @@
                 app:srcCompat="@android:drawable/ic_dialog_email" />
 
         </android.support.design.widget.CoordinatorLayout>
+
 
     </FrameLayout>
 
