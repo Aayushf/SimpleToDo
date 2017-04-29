@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 /**
  * Created by ayfadia on 4/24/17.
@@ -34,6 +35,7 @@ public class ColourSelectionDialog extends DialogFragment {
                 mListener.onDialogPositiveClick(ColourSelectionDialog.this);
             }
         });
+        Log.d("COLOURSELECTOR", "ONCREATE");
 
         DialogInterface.OnClickListener ocl = new DialogInterface.OnClickListener() {
             @Override

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,13 +21,15 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ColourSelectionDialog.ColourSelectionDialogListener, ViewPopulator.ViewPopulatorInterface {
+public class MainActivity extends AppCompatActivity implements ColourSelectionDialog.ColourSelectionDialogListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener {
     RecyclerView rv;
     TasksDBHelper helper;
     ViewPopulator vppending;
     ViewPopulator vpdone;
-    int colour;
+    public static int colour;
     boolean done;
+    final DialogFragment d = new AdderDialog();
+
     public static final String[] quotes = {"It isn't over till you succeed.", "The fact that you are not where you want to be should be enough motivation.", ""};
 
 
@@ -89,12 +92,12 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
 
             }
         });
-        b.setOnClickListener(new View.OnClickListener() {
+
+        Button badd = (Button)findViewById(R.id.badd);
+        badd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Task t = new Task(ettask.getText().toString(), 0, etcat.getText().toString(), colour, false);
-                TasksDBHelper helper = new TasksDBHelper(MainActivity.this);
-                helper.addTaskToDB(t);
+                d.show(getFragmentManager(), "");
             }
         });
 
@@ -108,14 +111,28 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
 
 
     @Override
-    public void onDialogPositiveClick(DialogFragment d) {
-        ColourSelectionDialog dia = (ColourSelectionDialog)d;
+    public void onDialogPositiveClick(DialogFragment df) {
+        ColourSelectionDialog dia = (ColourSelectionDialog)df;
         colour =dia.getColourSelected();
+        Log.d("MainActivity", "ONPOSITIVE");
+        AdderDialog ad = (AdderDialog)d;
+        ad.changeColour(colour);
+
+
     }
 
     @Override
     public void changed(int position) {
         rv.setAdapter(new ViewPopulator(MainActivity.this, done));
+
+    }
+
+    @Override
+    public void Done(Task t) {
+        TasksDBHelper helper = new TasksDBHelper(MainActivity.this);
+        helper.addTaskToDB(t);
+        AdderDialog ad = (AdderDialog)d;
+        ad.dismiss();
 
     }
 }

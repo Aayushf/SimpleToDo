@@ -6,13 +6,16 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.simpletodo.aayushf.simpletodo.ScrollingActivity"
-><LinearLayout
+
+    ><LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv">
+        android:id="@+id/rv"
+
+        >
 
     </android.support.v7.widget.RecyclerView>
     <RelativeLayout
@@ -36,117 +39,24 @@
             android:layout_height="wrap_content"
             android:id="@+id/cvcolours"
             android:layout_below="@+id/etcat">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Select Colour"
-                android:id="@+id/tvcolour"/>
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/llcolour"
-            android:visibility="gone"
-            android:layout_below="@+id/tvcolour"
-            >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Choose Colour"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tomato"
-            android:background="@color/tomato"
-            android:id="@+id/tomatob"
-
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tangerine"
-            android:background="@color/tangerine"
-            android:id="@+id/tangerineb"
-            android:layout_below="@+id/tomatob"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Banana"
-            android:background="@color/banana"
-            android:id="@+id/bananab"
-            android:layout_below="@id/tangerineb"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Basil"
-            android:background="@color/basil"
-            android:id="@+id/basilb"
-            android:layout_below="@id/bananab"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sage"
-            android:background="@color/sage"
-            android:id="@+id/sageb"
-            android:layout_below="@+id/basilb"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Peacock"
-            android:background="@color/peacock"
-            android:id="@+id/peacockb"
-            android:layout_below="@+id/sageb"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Blueberry"
-            android:background="@color/blueberry"
-            android:id="@+id/blueberryb"
-            android:layout_below="@+id/peacockb"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lavender"
-            android:background="@color/lavender"
-            android:id="@+id/lavenderb"
-            android:layout_below="@id/blueberryb"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Grape"
-            android:background="@color/grape"
-            android:id="@+id/grapeb"
-            android:layout_below="@id/lavenderb"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Flamingo"
-            android:background="@color/flamingo"
-            android:id="@+id/flamingob"
-            android:layout_below="@+id/grapeb"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Graphite"
-            android:background="@color/graphite"
-            android:id="@+id/graphiteb"
-            android:layout_below="@id/flamingob"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="White"
-            android:background="@color/defaultcolor"
-            android:id="@+id/whiteb"
-            android:layout_below="@id/graphiteb"/>
-        </RelativeLayout>
-            </RelativeLayout>
         </android.support.v7.widget.CardView>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button"
-            android:layout_below="@+id/cvcolours"/>
+            android:layout_below="@+id/cvcolours"
+            android:text="Add"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/badd"
+            android:text="ShowDialog"/>
+
 
     </RelativeLayout>
 </LinearLayout>

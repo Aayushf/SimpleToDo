@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:clipChildren="false">
+    android:clipChildren="false"
+    android:animateLayoutChanges="true">
     <android.support.v7.widget.CardView
 
         android:layout_width="wrap_content"
@@ -23,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="5dp"
-        android:id="@+id/relativel">
+        android:id="@+id/relativel"
+        android:animateLayoutChanges="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,19 +43,34 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvcat"
             android:layout_below="@+id/tvtask"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvcat"
             android:id="@+id/cvrl">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvdateadded"
 
-        <ImageButton
+
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvdatepending"
+                android:layout_below="@+id/tvdateadded"/>
+
+
+            <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_check_black_24dp"
             android:foregroundGravity="center"
             android:id="@+id/donebutton"
             android:background="@color/blueberry"
+
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             />

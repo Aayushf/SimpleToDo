@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SimpleDateFormat;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -64,11 +65,15 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
     @Override
     public void onBindViewHolder(final Holder holder, final int position) {
         holder.tvtask.setText(t.get(position).task);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE - dd MMM");
+
 
         holder.tvcat.setText(t.get(position).category);
         holder.tvprimk.setText(String.valueOf(t.get(position).primk));
         holder.cvrl.setVisibility(View.GONE);
         holder.visible = false;
+        holder.tvdateadded.setText(sdf.format(t.get(position).dateadded));
+        holder.tvdatepending.setText(sdf.format(t.get(position).datepending));
         int colour = t.get(position).colour;
         holder.cv.setCardBackgroundColor(Task.colours[colour]);
         holder.rl.setBackgroundColor(Task.colours[colour]);
@@ -135,7 +140,7 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
     }
     public class Holder extends RecyclerView.ViewHolder{
         CardView cv;
-        TextView tvtask, tvcat, tvprimk;
+        TextView tvtask, tvcat, tvprimk, tvdateadded, tvdatepending;
         ImageButton bdelete, bdone;
         boolean visible;
         RelativeLayout rl, cvrl;
@@ -155,6 +160,8 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
             bdone = (ImageButton)v.findViewById(R.id.donebutton);
             rl = (RelativeLayout)v.findViewById(R.id.relativel);
             cvrl = (RelativeLayout)v.findViewById(R.id.cvrl);
+            tvdateadded = (TextView)v.findViewById(R.id.tvdateadded);
+            tvdatepending = (TextView)v.findViewById(R.id.tvdatepending);
         }
 
 

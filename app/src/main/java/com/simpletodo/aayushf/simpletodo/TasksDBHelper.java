@@ -5,15 +5,21 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.text.SimpleDateFormat;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by ayfadia on 4/17/17.
  */
 
 public class TasksDBHelper extends SQLiteOpenHelper {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 
 
     public TasksDBHelper(Context context) {
@@ -36,12 +42,15 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         super.onDowngrade(db, oldVersion, newVersion);
     }
     public void addTaskToDB(Task t){
+
         ContentValues val = new ContentValues();
         val.put("TASK", t.task);
         val.put("PRIORITY", t.priority);
         val.put("CATEGORY", t.category);
         val.put("DONE", t.done);
         val.put("TASKCOLOUR", t.colour);
+        val.put("DATEADDED", sdf.format(t.dateadded));
+        val.put("DATEPENDING", sdf.format(t.datepending));
 
         SQLiteDatabase db = this.getWritableDatabase();
         long i = db.insert("TASKSTABLE", null, val);
@@ -66,12 +75,26 @@ public class TasksDBHelper extends SQLiteOpenHelper {
 
 
     }
-    public ArrayList<Task> getArrayListFromCursor(Cursor c){
+    public ArrayList<Task> getArrayListFromCursor(Cursor c) {
         Task t;
         ArrayList<Task> tasks = new ArrayList<Task>();
         c.moveToFirst();
         while(c.moveToNext()){
-            t = new Task(c.getString(c.getColumnIndex("TASK")), c.getInt(c.getColumnIndex("PRIORITY")), c.getString(c.getColumnIndex("CATEGORY")), c.getInt(c.getColumnIndex("PRIMK")), c.getInt(c.getColumnIndex("TASKCOLOUR")), ((c.getInt(c.getColumnIndex("DONE")))==1));
+            Date dateadded = null;
+            try {
+                dateadded = sdf.parse(c.getString(c.getColumnIndex("DATEADDED")));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date datepending = null;
+            try {
+                datepending = sdf.parse(c.getString(c.getColumnIndex("DATEPENDING")));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            t = new Task(c.getString(c.getColumnIndex("TASK")), c.getInt(c.getColumnIndex("PRIORITY")), c.getString(c.getColumnIndex("CATEGORY")), c.getInt(c.getColumnIndex("PRIMK")), c.getInt(c.getColumnIndex("TASKCOLOUR")), ((c.getInt(c.getColumnIndex("DONE")))==1), dateadded, datepending);
             Log.d("GetArrayFromCursor", String.valueOf(((c.getInt(c.getColumnIndex("DONE")))==1)));
             tasks.add(t);
 
