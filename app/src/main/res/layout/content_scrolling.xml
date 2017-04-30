@@ -18,46 +18,6 @@
         >
 
     </android.support.v7.widget.RecyclerView>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:id="@+id/rl">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Task"
-            android:id="@+id/ettask"/>
-        <EditText
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:hint="Category"
-            android:id="@+id/etcat"
-            android:layout_below="@+id/ettask"/>
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/cvcolours"
-            android:layout_below="@+id/etcat">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Choose Colour"/>
 
-        </android.support.v7.widget.CardView>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button"
-            android:layout_below="@+id/cvcolours"
-            android:text="Add"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/badd"
-            android:text="ShowDialog"/>
-
-
-    </RelativeLayout>
 </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

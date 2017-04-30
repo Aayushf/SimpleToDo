@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -110,12 +113,23 @@ public class TasksDBHelper extends SQLiteOpenHelper {
     }
     public ArrayList<Task> getPendingTasks(){
         Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE DONE = 0", null);
-        return getArrayListFromCursor(c);
+        return getSortedArrayList(getArrayListFromCursor(c));
 
     }
     public ArrayList<Task> getDoneTasks(){
         Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE DONE = 1", null);
         return getArrayListFromCursor(c);
+
+    }
+    public ArrayList<Task> getSortedArrayList(ArrayList<Task> unsorted){
+        Collections.sort(unsorted, new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                return o1.datepending.compareTo(o2.datepending);
+            }
+        });
+        return unsorted;
+
 
     }
 

@@ -5,9 +5,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -29,9 +31,10 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
     public static int colour;
     boolean done;
     final DialogFragment d = new AdderDialog();
-
+    boolean small = true;
     public static final String[] quotes = {"It isn't over till you succeed.", "The fact that you are not where you want to be should be enough motivation.", ""};
-
+    LinearLayoutManager llm = new LinearLayoutManager(MainActivity.this);
+    StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
 
 
@@ -42,23 +45,29 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_done:
-                    ((RelativeLayout)findViewById(R.id.rl)).setVisibility(View.INVISIBLE);
+
                     ((RecyclerView)findViewById(R.id.rv)).setVisibility(View.VISIBLE);
-                    ((RecyclerView)findViewById(R.id.rv)).setAdapter(new ViewPopulator(MainActivity.this, true));
+                    if (small)
+                        ((RecyclerView)findViewById(R.id.rv)).setLayoutManager(llm);
+                    else
+                        ((RecyclerView)findViewById(R.id.rv)).setLayoutManager(sglm);
+
+                    ((RecyclerView)findViewById(R.id.rv)).setAdapter(new ViewPopulator(MainActivity.this, true, small));
+
                     done = true;
+
                     return true;
                 case R.id.navigation_pending:
                     ((RecyclerView)findViewById(R.id.rv)).setVisibility(View.VISIBLE);
-                    ((RelativeLayout)findViewById(R.id.rl)).setVisibility(View.INVISIBLE);
-                    ((RecyclerView)findViewById(R.id.rv)).setAdapter(new ViewPopulator(MainActivity.this, false));
+                    if (small)
+                        ((RecyclerView)findViewById(R.id.rv)).setLayoutManager(llm);
+                    else
+                        ((RecyclerView)findViewById(R.id.rv)).setLayoutManager(sglm);
+
+                    ((RecyclerView)findViewById(R.id.rv)).setAdapter(new ViewPopulator(MainActivity.this, false, small));
                     done = false;
                     return true;
-                case R.id.navigation_add:
-                    ((RelativeLayout)findViewById(R.id.rl)).setVisibility(View.VISIBLE);
-                    ((RecyclerView)findViewById(R.id.rv)).setVisibility(View.GONE);
-
-                    return true;
-            }
+                }
             return false;
         }
 
@@ -71,35 +80,38 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        Button b = (Button)findViewById(R.id.button);
-        final EditText ettask = (EditText)findViewById(R.id.ettask);
-        final EditText etcat = (EditText)findViewById(R.id.etcat);
         rv = (RecyclerView)findViewById(R.id.rv);
-        ArrayList<Task> t = new ArrayList<Task>();
-        helper = new TasksDBHelper(this);
-        t = helper.getAllTasks();
-        rv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        vppending = new ViewPopulator(this,false );
-        vpdone = new ViewPopulator(this, true);
-        rv.setAdapter(vpdone);
+        rv.setAdapter(new ViewPopulator(MainActivity.this, true, small));
+        if (small)
+            rv.setLayoutManager(llm);
+        else
+            rv.setLayoutManager(sglm);
 
-        CardView cvcolour = (CardView)findViewById(R.id.cvcolours);
-        cvcolour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment d = new ColourSelectionDialog();
-                d.show(getFragmentManager(), "Choose Colour");
 
-            }
-        });
 
-        Button badd = (Button)findViewById(R.id.badd);
-        badd.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+
+
+        FloatingActionButton fabadd = (FloatingActionButton)findViewById(R.id.addfab);
+        fabadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 d.show(getFragmentManager(), "");
+
             }
         });
+        FloatingActionButton fabchangeadapter = (FloatingActionButton)findViewById(R.id.changeadapterfab);
+        fabchangeadapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                small = !small;
+
+            }
+        });
+
 
 
 
@@ -123,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
 
     @Override
     public void changed(int position) {
-        rv.setAdapter(new ViewPopulator(MainActivity.this, done));
+        rv.setAdapter(new ViewPopulator(MainActivity.this, done, small));
 
     }
 

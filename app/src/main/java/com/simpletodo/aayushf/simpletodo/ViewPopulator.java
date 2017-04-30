@@ -1,19 +1,13 @@
 package com.simpletodo.aayushf.simpletodo;
 
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +23,7 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
     Context c;
     ArrayList<Task> t;
     Context context;
+    Boolean small;
     public interface ViewPopulatorInterface{
         public void changed(int position);
     }
@@ -36,8 +31,9 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
 
 
 
-    public ViewPopulator(Context c, boolean done) {
+    public ViewPopulator(Context c, boolean done, boolean small) {
         super();
+        this.small = small;
         TasksDBHelper helper = new TasksDBHelper(c);
 
         if (done){
@@ -52,7 +48,13 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(c).inflate(R.layout.listitem, null);
+        View v;
+        if (small){
+            v = LayoutInflater.from(c).inflate(R.layout.smalllistitem, null);
+        }else {
+            v = LayoutInflater.from(c).inflate(R.layout.listitemcardstaggered, null);
+        }
+
         Holder h = new Holder(v);
         Log.d("VP", "ONCREATEVIEWHOLDER");
 
@@ -75,12 +77,11 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
         holder.tvdateadded.setText(sdf.format(t.get(position).dateadded));
         holder.tvdatepending.setText(sdf.format(t.get(position).datepending));
         int colour = t.get(position).colour;
-        holder.cv.setCardBackgroundColor(Task.colours[colour]);
         holder.rl.setBackgroundColor(Task.colours[colour]);
         Log.d("BOUND", String.valueOf(t.get(position).colour)+" "+ String.valueOf(Task.colours[colour]));
         myInterface = (ViewPopulatorInterface)c;
 
-        holder.cv.setOnClickListener(new View.OnClickListener() {
+        holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (holder.cvrl.getVisibility()==View.VISIBLE){
