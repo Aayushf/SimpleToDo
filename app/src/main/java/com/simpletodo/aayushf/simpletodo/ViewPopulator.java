@@ -26,6 +26,7 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
     Boolean small;
     public interface ViewPopulatorInterface{
         public void changed(int position);
+        public void clicked(Task t);
     }
     ViewPopulatorInterface myInterface;
 
@@ -91,6 +92,7 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
                     holder.cvrl.setVisibility(View.VISIBLE);
 
                 }
+                myInterface.clicked(t.get(position));
 
 
 

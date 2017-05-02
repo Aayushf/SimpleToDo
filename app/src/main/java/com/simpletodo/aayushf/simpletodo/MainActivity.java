@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -20,6 +22,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         rv = (RecyclerView)findViewById(R.id.rv);
         rv.setAdapter(new ViewPopulator(MainActivity.this, true, small));
+
         if (small)
             rv.setLayoutManager(llm);
         else
@@ -145,6 +149,11 @@ public class MainActivity extends AppCompatActivity implements ColourSelectionDi
         helper.addTaskToDB(t);
         AdderDialog ad = (AdderDialog)d;
         ad.dismiss();
+
+    }
+
+    @Override
+    public void clicked(Task t) {
 
     }
 }
