@@ -132,5 +132,10 @@ public class TasksDBHelper extends SQLiteOpenHelper {
 
 
     }
+    public boolean getDone(int primk){
+        Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE PRIMK = "+String.valueOf(primk), null);
+        c.moveToFirst();
+        return c.getInt(c.getColumnIndex("DONE"))>0;
+    }
 
 }

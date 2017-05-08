@@ -21,7 +21,7 @@ public class Task {
         this.task = task;
         this.priority = priority;
         this.category = category;
-        this.done = false;
+        this.done = done;
         this.colour = colour;
         this.dateadded = dateadded;
         this.datepending = datepending;
@@ -33,7 +33,7 @@ public class Task {
         this.priority = priority;
         this.category = category;
         this.primk = primk;
-        this.done = false;
+        this.done = done;
         this.colour = colour;
     }
 

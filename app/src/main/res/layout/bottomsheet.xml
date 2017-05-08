@@ -5,12 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/bottom_sheet_behavior"
     android:elevation="100dp"
-    android:id="@+id/bsv">
+    android:id="@+id/bsv"
+    android:background="@color/cardview_dark_background">
+    >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/bottomsheetrl"
-        android:background="@color/basil">
+        android:id="@+id/bottomsheetrl">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,8 +24,24 @@
             android:layout_height="wrap_content"
             android:id="@+id/bottomsheettag"
             android:layout_below="@+id/bottomsheettasktv"
+            android:textSize="20sp"
+            android:textStyle="italic"
             />
-        
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bottomsheettvdateadded"
+            android:layout_below="@+id/bottomsheettag"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bottomsheettvdatepending"
+            android:layout_below="@+id/bottomsheettvdateadded"
+            android:textSize="15sp"
+            />
+
 
     </RelativeLayout>
 

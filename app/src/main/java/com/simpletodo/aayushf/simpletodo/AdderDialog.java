@@ -13,6 +13,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -38,7 +39,7 @@ public class AdderDialog extends DialogFragment {
     CardView cvadder;
     int mayear, mamonth, maday, mpyear, mpmonth, mpday;
     Date dateadded, datepending;
-
+    Button fbcolour;
 
 
 
@@ -55,12 +56,12 @@ public class AdderDialog extends DialogFragment {
         Log.d("ADDERDIALOG", "OnCreate");
         final EditText ettag = (EditText)v.findViewById(R.id.cvettags);
         rl = (RelativeLayout)v.findViewById(R.id.rlinsidecv);
-        FloatingActionButton fabcolour = (FloatingActionButton)v.findViewById(R.id.colorfab);
+        fbcolour = (Button)v.findViewById(R.id.colourfb);
         final EditText ettask = (EditText)v.findViewById(R.id.cvettask);
         cvadder = (CardView)v.findViewById(R.id.cvadder);
         Log.d("ADDERDIALOG", "OnAttach");
-        FloatingActionButton fabdone = (FloatingActionButton)v.findViewById(R.id.donefab);
-        fabdone.setOnClickListener(new View.OnClickListener() {
+        Button fbdone = (Button)v.findViewById(R.id.donefb);
+        fbdone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               Task t = new Task(ettask.getText().toString(), 0, ettag.getText().toString(), colour, false, dateadded, datepending);
@@ -70,7 +71,7 @@ public class AdderDialog extends DialogFragment {
         });
 
 
-        fabcolour.setOnClickListener(new View.OnClickListener() {
+        fbcolour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment d = new ColourSelectionDialog();
@@ -79,17 +80,18 @@ public class AdderDialog extends DialogFragment {
 
             }
         });
-        FloatingActionButton fabdateadded = (FloatingActionButton)v.findViewById(R.id.dateaddedfab);
-        fabdateadded.setOnClickListener(new View.OnClickListener() {
+        final Button fbdateadded = (Button)v.findViewById(R.id.dateaddedfb);
+        fbdateadded.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateDialog(true);
 
 
+
             }
         });
-        FloatingActionButton fabdatepending = (FloatingActionButton)v.findViewById(R.id.datependingfab);
-        fabdatepending.setOnClickListener(new View.OnClickListener() {
+        Button fbdatepending = (Button)v.findViewById(R.id.datependingfb);
+        fbdatepending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDateDialog(false);
@@ -108,6 +110,7 @@ public class AdderDialog extends DialogFragment {
     public void changeColour(int colour){
         rl.setBackgroundColor(Task.colours[colour]);
         cvadder.setCardBackgroundColor(Task.colours[colour]);
+        fbcolour.setText(Task.coloursnames[colour]);
         this.colour = colour;
     }
 
@@ -131,18 +134,19 @@ public class AdderDialog extends DialogFragment {
                     mayear = year;
                 mamonth = month;
                 maday = dayOfMonth;
-                TextView tvdateadded = (TextView)v.findViewById(R.id.dateaddedtvadder);
-                dateadded = new Date(mayear-1900, mamonth, maday);
+                    Button bdateadded = (Button)v.findViewById(R.id.dateaddedfb);
 
-                tvdateadded.setText(format.format(dateadded));}
+                dateadded = new Date(mayear-1900, mamonth, maday);
+                bdateadded.setText("ADDED ON "+format.format(dateadded));
+                }
                 else{
                     mpyear = year;
                     mpmonth = month;
                     mpday = dayOfMonth;
-                    TextView tvdatepending = (TextView)v.findViewById(R.id.datependingtvadder);
-                    datepending = new Date(mpyear-1900, mpmonth, mpday);
+                                        Button bdatepending = (Button)v.findViewById(R.id.datependingfb);
 
-                    tvdatepending.setText(format.format(datepending));
+                    datepending = new Date(mpyear-1900, mpmonth, mpday);
+                    bdatepending.setText("DUE ON "+format.format(datepending));
 
 
                 }
