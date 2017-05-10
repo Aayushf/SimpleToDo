@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class Main3Activity extends AppCompatActivity implements RecyclerFragment.OnFragmentInteractionListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener {
+public class Main3Activity extends AppCompatActivity implements RecyclerFragment.OnFragmentInteractionListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -199,6 +199,12 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
         add.changeColour(((ColourSelectionDialog)d).getColourSelected());
 
 
+    }
+
+    @Override
+    public void timeSet(long time, int taskpk) {
+        NotificationsDBHelper helper = new NotificationsDBHelper(Main3Activity.this);
+        helper.addNotifToDb(new TaskNotification(taskpk, time));
     }
 
     /**
