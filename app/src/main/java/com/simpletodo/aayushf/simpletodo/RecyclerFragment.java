@@ -20,7 +20,7 @@ import android.widget.TextView;
  * Use the {@link RecyclerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecyclerFragment extends Fragment {
+public class RecyclerFragment extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +29,7 @@ public class RecyclerFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private boolean done;
     private boolean small;
+    View v;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,7 +67,7 @@ public class RecyclerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.recycler, null);
+        v = inflater.inflate(R.layout.recycler, null);
         RecyclerView rv = (RecyclerView)v.findViewById(R.id.fragmentrecyclerview);
         if (small)
             rv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -101,6 +102,27 @@ public class RecyclerFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+
+    public void refreshMyLayout() {
+        if (getArguments() != null) {
+            done = getArguments().getBoolean(ARG_PARAM1);
+            small = getArguments().getBoolean(ARG_PARAM2);
+        }
+        if (v!=null){
+            RecyclerView rv = (RecyclerView)v.findViewById(R.id.fragmentrecyclerview);
+            if (small)
+                rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+            else
+                rv.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+            rv.setAdapter(new ViewPopulator(getActivity(), done, small));
+
+        }
+
+
+
+
     }
 
     /**

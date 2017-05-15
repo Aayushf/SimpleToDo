@@ -43,6 +43,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvcat"
             android:layout_below="@+id/tvtask"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pointstv"
+            android:layout_below="@+id/tvcat"
+            android:textStyle="bold"/>
+
 
         <RelativeLayout
             android:layout_width="match_parent"

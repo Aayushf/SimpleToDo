@@ -60,11 +60,12 @@ public class AdderDialog extends DialogFragment {
         final EditText ettask = (EditText)v.findViewById(R.id.cvettask);
         cvadder = (CardView)v.findViewById(R.id.cvadder);
         Log.d("ADDERDIALOG", "OnAttach");
+        final EditText etpoints = (EditText)v.findViewById(R.id.etpoints);
         Button fbdone = (Button)v.findViewById(R.id.donefb);
         fbdone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Task t = new Task(ettask.getText().toString(), 0, ettag.getText().toString(), colour, false, dateadded, datepending);
+              Task t = new Task(ettask.getText().toString(), Integer.valueOf(etpoints.getText().toString()), ettag.getText().toString(), colour, false, dateadded, datepending);
               mListener.Done(t);
 
             }

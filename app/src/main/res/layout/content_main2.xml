@@ -1,68 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.simpletodo.aayushf.simpletodo.Main3Activity">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.simpletodo.aayushf.simpletodo.Main2Activity"
+    tools:showIn="@layout/app_bar_main2">
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:theme="@style/AppTheme.AppBarOverlay">
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="exitUntilCollapsed|scroll"
-            app:contentScrim="@color/cardview_dark_background"
-            >
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:layout_collapseMode="pin">
-
-        </android.support.v7.widget.Toolbar>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvpoints"
-                android:text="Points Here"
-                android:gravity="center"
-                android:textSize="40sp"
-                android:textColor="#FF000000"
-                android:textStyle="bold"
-                android:layout_below="@+id/toolbar"
-
-                />
-        </RelativeLayout>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/vp"></android.support.v4.view.ViewPager>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -146,9 +95,7 @@
         app:srcCompat="@drawable/ic_add_black_24dp" />
 
 
-        </android.support.design.widget.CoordinatorLayout>
 
 
-
-
+</android.support.design.widget.CoordinatorLayout>
 

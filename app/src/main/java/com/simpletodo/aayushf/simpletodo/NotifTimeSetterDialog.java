@@ -1,18 +1,25 @@
 package com.simpletodo.aayushf.simpletodo;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -51,24 +58,27 @@ int myear, mmonth, mday, mhour, mminute;
         donebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date d = new Date(myear-1990, mmonth, mday, mhour, mminute);
+                Date d = new Date(myear, mmonth, mday, mhour, mminute);
                 long time = d.getTime();
+
                 NotifTimeSetterListener listener = (NotifTimeSetterListener)getActivity();
                 listener.timeSet(time, taskpk);
-            }
+
+                }
         });
+        Log.d("NOTIFTS", "NOTIFTS CREATED");
 
 
 
 
-        return super.onCreateDialog(savedInstanceState);
+        return b.create();
 
     }
     public void showDateDialog(){
         DatePickerDialog.OnDateSetListener l = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                myear = year;
+                myear = year-1970;
                 mmonth = month;
                 mday = dayOfMonth;
             }

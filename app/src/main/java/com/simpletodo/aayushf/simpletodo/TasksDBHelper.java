@@ -31,7 +31,7 @@ public class TasksDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE TASKSTABLE(PRIMK INTEGER PRIMARY KEY AUTOINCREMENT, TASK TEXT, PRIORITY INTEGER, CATEGORY TEXT, TASKCOLOUR INTEGER, DATEADDED TEXT, DATEPENDING TEXT, DONE BOOLEAN  )");
+        db.execSQL("CREATE TABLE TASKSTABLE(PRIMK INTEGER PRIMARY KEY AUTOINCREMENT, TASK TEXT, POINTS INTEGER, CATEGORY TEXT, TASKCOLOUR INTEGER, DATEADDED TEXT, DATEPENDING TEXT, DONE BOOLEAN  )");
 
     }
 
@@ -48,7 +48,7 @@ public class TasksDBHelper extends SQLiteOpenHelper {
 
         ContentValues val = new ContentValues();
         val.put("TASK", t.task);
-        val.put("PRIORITY", t.priority);
+        val.put("POINTS", t.points);
         val.put("CATEGORY", t.category);
         val.put("DONE", t.done);
         val.put("TASKCOLOUR", t.colour);
@@ -97,7 +97,7 @@ public class TasksDBHelper extends SQLiteOpenHelper {
             }
 
 
-            t = new Task(c.getString(c.getColumnIndex("TASK")), c.getInt(c.getColumnIndex("PRIORITY")), c.getString(c.getColumnIndex("CATEGORY")), c.getInt(c.getColumnIndex("PRIMK")), c.getInt(c.getColumnIndex("TASKCOLOUR")), ((c.getInt(c.getColumnIndex("DONE")))==1), dateadded, datepending);
+            t = new Task(c.getString(c.getColumnIndex("TASK")), c.getInt(c.getColumnIndex("POINTS")), c.getString(c.getColumnIndex("CATEGORY")), c.getInt(c.getColumnIndex("PRIMK")), c.getInt(c.getColumnIndex("TASKCOLOUR")), ((c.getInt(c.getColumnIndex("DONE")))==1), dateadded, datepending);
             Log.d("GetArrayFromCursor", String.valueOf(((c.getInt(c.getColumnIndex("DONE")))==1)));
             tasks.add(t);
 
@@ -136,6 +136,27 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE PRIMK = "+String.valueOf(primk), null);
         c.moveToFirst();
         return c.getInt(c.getColumnIndex("DONE"))>0;
+    }
+    public Task getTaskFromPK(int primk){
+        Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery( "SELECT * FROM taskstable WHERE PRIMK = "+String.valueOf(primk),null);
+        c.moveToFirst();
+        Date dateadded = null;
+        try {
+            dateadded = sdf.parse(c.getString(c.getColumnIndex("DATEADDED")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date datepending = null;
+        try {
+            datepending = sdf.parse(c.getString(c.getColumnIndex("DATEPENDING")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        return new Task(c.getString(c.getColumnIndex("TASK")), c.getInt(c.getColumnIndex("POINTS")), c.getString(c.getColumnIndex("CATEGORY")), c.getInt(c.getColumnIndex("PRIMK")), c.getInt(c.getColumnIndex("TASKCOLOUR")), ((c.getInt(c.getColumnIndex("DONE")))==1), dateadded, datepending);
+
+
     }
 
 }

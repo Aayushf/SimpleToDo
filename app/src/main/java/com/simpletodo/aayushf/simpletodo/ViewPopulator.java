@@ -77,6 +77,10 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
         holder.visible = false;
         holder.tvdateadded.setText(sdf.format(t.get(position).dateadded));
         holder.tvdatepending.setText(sdf.format(t.get(position).datepending));
+        if(holder.tvpoints != null ){
+            holder.tvpoints.setText(String.valueOf(t.get(position).points));
+        }
+
         int colour = t.get(position).colour;
         holder.rl.setBackgroundColor(Task.colours[colour]);
         Log.d("BOUND", String.valueOf(t.get(position).colour)+" "+ String.valueOf(Task.colours[colour]));
@@ -85,45 +89,10 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
         holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.cvrl.getVisibility()==View.VISIBLE){
-                holder.cvrl.setVisibility(View.GONE);
 
-                }else{
-                    holder.cvrl.setVisibility(View.VISIBLE);
-
-                }
                 myInterface.clicked(t.get(position));
 
 
-
-
-
-            }
-        });
-        holder.bdelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TasksDBHelper helper = new TasksDBHelper(c);
-                helper.deleteTaskFromDB(Integer.valueOf(holder.tvprimk.getText().toString()));
-                ViewPopulator.this.notifyDataSetChanged();
-                Random r = new Random();
-                holder.tvtask.setText(MainActivity.quotes[r.nextInt(1)]);
-                holder.tvcat.setText("");
-                myInterface.changed(position);
-
-
-            }
-        });
-        holder.bdone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TasksDBHelper helper = new TasksDBHelper(c);
-                helper.setDone(Integer.valueOf(holder.tvprimk.getText().toString()), !t.get(position).done);
-                Random r = new Random();
-                holder.tvtask.setText(MainActivity.quotes[r.nextInt(1)]);
-                holder.tvcat.setText("");
-                myInterface.changed(position);
-                Log.d("DeleteOCL", String.valueOf(!t.get(position).done));
 
 
 
@@ -143,7 +112,7 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
     }
     public class Holder extends RecyclerView.ViewHolder{
         CardView cv;
-        TextView tvtask, tvcat, tvprimk, tvdateadded, tvdatepending;
+        TextView tvtask, tvcat, tvprimk, tvdateadded, tvdatepending, tvpoints;
         ImageButton bdelete, bdone;
         boolean visible;
         RelativeLayout rl, cvrl;
@@ -165,6 +134,7 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
             cvrl = (RelativeLayout)v.findViewById(R.id.cvrl);
             tvdateadded = (TextView)v.findViewById(R.id.tvdateadded);
             tvdatepending = (TextView)v.findViewById(R.id.tvdatepending);
+            tvpoints = (TextView)v.findViewById(R.id.pointstv);
         }
 
 

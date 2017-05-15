@@ -1,17 +1,25 @@
 package com.simpletodo.aayushf.simpletodo;
 
+import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -29,7 +37,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class Main3Activity extends AppCompatActivity implements RecyclerFragment.OnFragmentInteractionListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener {
+public class Main3Activity extends AppCompatActivity implements  RecyclerFragment.OnFragmentInteractionListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener, NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -43,13 +51,34 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
     DialogFragment ad = new AdderDialog();
     private SectionsPagerAdapter mSectionsPagerAdapter;
     FloatingActionButton fab;
-
+    ActionBarDrawerToggle toggle;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
     boolean small = false;
     BottomSheetBehavior bsb;
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+    public interface Main3Interface{
+        public void refreshLayout();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +94,14 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
 
 
 
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -86,10 +118,21 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
             bsb.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         }
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        if(drawer != null){
+            drawer.addDrawerListener(toggle);
+        }
+        toggle.syncState();
+        navigationView.bringToFront();
+
+
 
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.bringToFront();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +146,8 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
             @Override
             public void onClick(View v) {
                 TasksDBHelper helper = new TasksDBHelper(Main3Activity.this);
-
+                RecyclerFragment rf = (RecyclerFragment)mSectionsPagerAdapter.getItem(mViewPager.getCurrentItem());
+                rf.refreshMyLayout();
                 helper.setDone(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()), !helper.getDone(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString())));
             }
         });
@@ -113,6 +157,8 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
             public void onClick(View v) {
                 TasksDBHelper helper = new TasksDBHelper(Main3Activity.this);
                 helper.deleteTaskFromDB(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
+                RecyclerFragment rf = (RecyclerFragment)mSectionsPagerAdapter.getItem(mViewPager.getCurrentItem());
+                rf.refreshMyLayout();
             }
         });
         FloatingActionButton notifyfab = (FloatingActionButton)findViewById(R.id.notifyfab);
@@ -128,12 +174,25 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
 
                 NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
                 manager.notify(01, notifbuilder.build());
+                NotifTimeSetterDialog d = new NotifTimeSetterDialog();
+                d.setTaskPK(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
+                d.show(getFragmentManager(), "Pick Time");
 
             }
         });
 
 
     }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 
 
     @Override
@@ -182,10 +241,7 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
         }
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
 
     @Override
     public void Done(Task t) {
@@ -204,7 +260,14 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
     @Override
     public void timeSet(long time, int taskpk) {
         NotificationsDBHelper helper = new NotificationsDBHelper(Main3Activity.this);
-        helper.addNotifToDb(new TaskNotification(taskpk, time));
+        long l = helper.addNotifToDb(new TaskNotification(taskpk, time));
+        Intent i = new Intent(Main3Activity.this , Notifier.class);
+        i.putExtra("notifprimk", l);
+
+        PendingIntent pi = PendingIntent.getBroadcast(Main3Activity.this , 0,i, 0);
+        AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, time, pi);
+
     }
 
     /**
@@ -244,6 +307,7 @@ public class Main3Activity extends AppCompatActivity implements RecyclerFragment
         manager.cancel(notifid);
         TasksDBHelper helper = new TasksDBHelper(Main3Activity.this);
         helper.setDone(primk, true);
+
 
 
     }
