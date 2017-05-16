@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by ayfadia on 4/17/17.
@@ -157,6 +159,23 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         return new Task(c.getString(c.getColumnIndex("TASK")), c.getInt(c.getColumnIndex("POINTS")), c.getString(c.getColumnIndex("CATEGORY")), c.getInt(c.getColumnIndex("PRIMK")), c.getInt(c.getColumnIndex("TASKCOLOUR")), ((c.getInt(c.getColumnIndex("DONE")))==1), dateadded, datepending);
 
 
+    }
+    public String[] getAllCategories(){
+        Set<String> str = new HashSet<>();
+        Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE", null);
+        c.moveToFirst();
+        while (c.moveToNext()){
+            String[] strings = (c.getString(c.getColumnIndex("CATEGORY"))).split("\n");
+            for (String s : strings
+                 ) {
+                if (str.contains(s)){
+                    break;
+                }
+                str.add(s);
+
+            }
+        }
+        return str.toArray(new String[str.size()]);
     }
 
 }

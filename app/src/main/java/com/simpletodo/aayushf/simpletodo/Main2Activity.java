@@ -24,8 +24,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,  RecyclerFragment.OnFragmentInteractionListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener{
@@ -95,9 +101,20 @@ public class Main2Activity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        String[] alltags = helper.getAllCategories();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main2Activity.this, R.layout.simpledrawerlistitem, R.id.drawerlisttv, alltags);
+        ListView lvdrawer = (ListView)findViewById(R.id.listindrawer);
+        lvdrawer.setAdapter(adapter);
+        lvdrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(Main2Activity.this, "CLICKED ON "+ String.valueOf(position)+" "+ ((TextView) view.findViewById(R.id.drawerlisttv)).getText().toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
