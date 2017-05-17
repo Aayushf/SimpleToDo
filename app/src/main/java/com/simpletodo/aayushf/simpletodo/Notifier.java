@@ -28,7 +28,7 @@ public class Notifier extends BroadcastReceiver {
         TaskNotification tn = helper.getNotifFromPK((int) l);
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
         TasksDBHelper h = new TasksDBHelper(context);
-        Intent i = new Intent(context, Main3Activity.class);
+        Intent i = new Intent(context, Main2Activity.class);
         i.putExtra("primknotif", h.getTaskFromPK(tn.taskpk).primk);
         i.putExtra("notifid", tn.notifpk);
 

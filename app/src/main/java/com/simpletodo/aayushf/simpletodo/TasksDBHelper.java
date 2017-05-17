@@ -84,7 +84,8 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         Task t;
         ArrayList<Task> tasks = new ArrayList<Task>();
         c.moveToFirst();
-        while(c.moveToNext()){
+        if (c.getCount()!=0){
+        do{
             Date dateadded = null;
             try {
                 dateadded = sdf.parse(c.getString(c.getColumnIndex("DATEADDED")));
@@ -103,8 +104,9 @@ public class TasksDBHelper extends SQLiteOpenHelper {
             Log.d("GetArrayFromCursor", String.valueOf(((c.getInt(c.getColumnIndex("DONE")))==1)));
             tasks.add(t);
 
-        }
-        Log.d("HELPER", "TASKS RETURNED");
+        }while(c.moveToNext());}
+
+        Log.d("HELPER", "TASKS RETURNED "+String.valueOf(tasks.size()));
         return tasks;
 
 
@@ -113,13 +115,15 @@ public class TasksDBHelper extends SQLiteOpenHelper {
         Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE", null);
         return getArrayListFromCursor(c);
     }
-    public ArrayList<Task> getPendingTasks(){
-        Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE DONE = 0", null);
+    public ArrayList<Task> getPendingTasks(String tagtodisplay){
+        Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE DONE = 0 AND CATEGORY LIKE '%"+tagtodisplay+"%'", null);
+        Log.d("GETALLTASKS: "+tagtodisplay, String.valueOf(c.getCount()));
         return getSortedArrayList(getArrayListFromCursor(c));
 
     }
-    public ArrayList<Task> getDoneTasks(){
-        Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE DONE = 1", null);
+    public ArrayList<Task> getDoneTasks(String tagtodisplay){
+        Cursor c = TasksDBHelper.this.getWritableDatabase().rawQuery("SELECT * FROM TASKSTABLE WHERE DONE = 1 AND CATEGORY LIKE '%"+tagtodisplay+"%'", null);
+        Log.d("GETALLTASKS:"+tagtodisplay, String.valueOf(c.getCount()));
         return getArrayListFromCursor(c);
 
     }
@@ -176,6 +180,17 @@ public class TasksDBHelper extends SQLiteOpenHelper {
             }
         }
         return str.toArray(new String[str.size()]);
+    }
+    public int getTotalPoints(){
+        ArrayList<Task> t = new ArrayList<>();
+        t = getDoneTasks("");
+        int points = 0;
+        for (Task task :t
+             ) {
+            points+=task.points;
+
+        }
+        return points;
     }
 
 }

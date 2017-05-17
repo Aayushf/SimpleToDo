@@ -22,8 +22,18 @@ import java.util.Random;
 public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
     Context c;
     ArrayList<Task> t;
+
+    public void setTagtodisplay(String tagtodisplay) {
+
+        this.tagtodisplay = tagtodisplay;
+        TasksDBHelper helper = new TasksDBHelper(c);
+        ViewPopulator.this.notifyDataSetChanged();
+
+    }
+
     Context context;
     Boolean small;
+    String tagtodisplay = "";
     public interface ViewPopulatorInterface{
         public void changed(int position);
         public void clicked(Task t);
@@ -32,15 +42,21 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
 
 
 
-    public ViewPopulator(Context c, boolean done, boolean small) {
+    public ViewPopulator(Context c, boolean done, boolean small, String tagtodisplay) {
         super();
         this.small = small;
         TasksDBHelper helper = new TasksDBHelper(c);
+        if (tagtodisplay == null){
+            this.tagtodisplay= "";
+        }else{
+            this.tagtodisplay = tagtodisplay;
+        }
 
         if (done){
-        t = helper.getDoneTasks();
+        t = helper.getDoneTasks(tagtodisplay);
         }else{
-            t = helper.getPendingTasks();
+            t = helper.getPendingTasks(tagtodisplay);
+
         }
 
         this.c = c;
@@ -99,7 +115,7 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
             }
         });
 
-        Log.d("VP", "BOUND");
+        Log.d("VP", "BOUND"+String.valueOf(position));
 
 
     }

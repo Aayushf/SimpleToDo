@@ -32,9 +32,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Random;
 
 public class Main2Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,  RecyclerFragment.OnFragmentInteractionListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener{
+        implements NavigationView.OnNavigationItemSelectedListener,   ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener{
     ViewPager viewPager;
     TabLayout tabLayout;
     BottomSheetBehavior bsb;
@@ -49,7 +50,7 @@ public class Main2Activity extends AppCompatActivity
 
         viewPager = (ViewPager)findViewById(R.id.vp);
         tabLayout = (TabLayout)findViewById(R.id.tl);
-        TabAdapter adp = new TabAdapter(getSupportFragmentManager());
+        final TabAdapter adp = new TabAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adp);
         tabLayout.setupWithViewPager(viewPager);
         NestedScrollView nsview = (NestedScrollView)findViewById(R.id.bsnsvmain3);
@@ -59,20 +60,38 @@ public class Main2Activity extends AppCompatActivity
             bsb.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         }
+        updatePoints();
+        TextView tvquote = (TextView)findViewById(R.id.quotetvnav);
+        Random r = new Random();
+        tvquote.setText(Task.quotes[r.nextInt(1)]);
         FloatingActionButton fabbsdone = (FloatingActionButton)findViewById(R.id.bottomsheetdonefab);
         fabbsdone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
                 helper.setDone(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()), !helper.getDone(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString())));
+                updatePoints();
+                adp.notifyDataSetChanged();
             }
         });
         FloatingActionButton fabbsdelete = (FloatingActionButton)findViewById(R.id.bottomsheetdeletefab);
         fabbsdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
-                helper.deleteTaskFromDB(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
+                TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);helper.deleteTaskFromDB(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
+                updatePoints();
+                adp.notifyDataSetChanged();
+            }
+        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                ad.show(getFragmentManager(), "Add a Task");
+                updatePoints();
+                adp.notifyDataSetChanged();
             }
         });
         FloatingActionButton notifyfab = (FloatingActionButton)findViewById(R.id.notifyfab);
@@ -80,7 +99,7 @@ public class Main2Activity extends AppCompatActivity
             @Override
 
             public void onClick(View v) {
-                Intent i = new Intent(Main2Activity.this, Main3Activity.class);
+                Intent i = new Intent(Main2Activity.this, Main2Activity.class);
                 i.putExtra("primknotif", Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
                 i.putExtra("notifid", 01);
                 PendingIntent pi = PendingIntent.getActivity(Main2Activity.this,0,i, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -110,6 +129,9 @@ public class Main2Activity extends AppCompatActivity
         lvdrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                adp.setTagtodisplay(((TextView) view.findViewById(R.id.drawerlisttv)).getText().toString());
+                adp.notifyDataSetChanged();
+                setTitle(((TextView) view.findViewById(R.id.drawerlisttv)).getText().toString());
                 Toast.makeText(Main2Activity.this, "CLICKED ON "+ String.valueOf(position)+" "+ ((TextView) view.findViewById(R.id.drawerlisttv)).getText().toString(), Toast.LENGTH_LONG).show();
             }
         });
@@ -204,6 +226,7 @@ public class Main2Activity extends AppCompatActivity
     public void Done(Task t) {
         TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
         helper.addTaskToDB(t);
+        viewPager.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -230,12 +253,16 @@ public class Main2Activity extends AppCompatActivity
     public void changed(int position) {
 
     }
+    public void updatePoints(){
+        TextView tvpoints = (TextView)findViewById(R.id.pointstvdrawer);
 
+        TasksDBHelper h  = new TasksDBHelper(Main2Activity.this);
+        tvpoints.setText(String.valueOf(h.getTotalPoints()));
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        
     }
+
+
+
 }
 
 

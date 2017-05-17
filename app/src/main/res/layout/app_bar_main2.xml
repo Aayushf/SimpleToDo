@@ -9,15 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="256dp">
-
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
 
         <android.support.v7.widget.Toolbar
@@ -26,20 +17,10 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/pointstvmain"
-            android:layout_below="@+id/toolbar"
-            android:text="POINTS HERE"
-            android:textSize="40sp"
-            android:textStyle="bold"/>
-        </RelativeLayout>
-</android.support.design.widget.CollapsingToolbarLayout>
         <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:id="@+id/tl"></android.support.design.widget.TabLayout>
 
 
