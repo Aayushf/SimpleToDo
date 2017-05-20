@@ -17,34 +17,57 @@
         android:layout_height="match_parent"
         android:id="@+id/nav_view"
         android:layout_gravity="start"
-        android:background="#FF000000">
+        android:background="@color/colorPrimary">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lldrawer">
-            <TextView
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/quotetvnav"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/pointstvdrawer"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                android:layout_below="@+id/quotetvnav"
-                />
+                android:layout_height="@dimen/nav_header_height"
+                android:background="@drawable/side_nav_bar"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                android:id="@+id/drawerheader">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/nav_header_vertical_spacing"
+                    app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/nav_header_vertical_spacing"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:id="@+id/pointstvdrawer"/>
+
+                <TextView
+                    android:id="@+id/quotetvnav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </LinearLayout>
+
 
         </RelativeLayout>
 
-        <ListView
+
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/listindrawer"
-            android:layout_below="@+id/lldrawer"></ListView>
+            android:id="@+id/rvindrawer"
+            android:layout_below="@+id/lldrawer"></android.support.v7.widget.RecyclerView>
 
     </RelativeLayout>
 

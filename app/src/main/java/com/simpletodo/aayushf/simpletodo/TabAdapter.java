@@ -13,9 +13,13 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     boolean small;
     String tagtodisplay;
 
+    public TabAdapter(FragmentManager fm) {
+        super(fm);
+    }
+
     @Override
     public int getItemPosition(Object object) {
-        RecyclerFragment rf = (RecyclerFragment)object;
+        RecyclerFragment rf = (RecyclerFragment) object;
         rf.refreshFragment(tagtodisplay);
         return super.getItemPosition(object);
     }
@@ -27,9 +31,9 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
     public void setTagtodisplay(String tagtodisplay) {
         TabAdapter.this.notifyDataSetChanged();
-        if (tagtodisplay == null){
+        if (tagtodisplay == null) {
             this.tagtodisplay = " ";
-        }else{
+        } else {
             this.tagtodisplay = tagtodisplay;
         }
 
@@ -40,14 +44,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         this.small = small;
     }
 
-    public TabAdapter(FragmentManager fm) {
-        super(fm);
-    }
-
     @Override
     public Fragment getItem(int position) {
         Log.d("TABADAPTER", "GETITEM CALLED");
-        return RecyclerFragment.newInstance(position>0, small, tagtodisplay);
+        return RecyclerFragment.newInstance(position > 0, small, tagtodisplay);
 
 
     }

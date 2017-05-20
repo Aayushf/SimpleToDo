@@ -1,7 +1,6 @@
 package com.simpletodo.aayushf.simpletodo;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,19 +19,16 @@ import android.widget.TextView;
  * Use the {@link RecyclerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecyclerFragment extends Fragment  {
+public class RecyclerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
-
-
-
+    View v;
     // TODO: Rename and change types of parameters
     private boolean done;
     private boolean small;
-    View v;
     private String tagtodisplay;
 
 
@@ -74,7 +69,7 @@ public class RecyclerFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.recycler, null);
-        RecyclerView rv = (RecyclerView)v.findViewById(R.id.fragmentrecyclerview);
+        RecyclerView rv = (RecyclerView) v.findViewById(R.id.fragmentrecyclerview);
         if (small)
             rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         else
@@ -82,7 +77,6 @@ public class RecyclerFragment extends Fragment  {
         ViewPopulator vp = new ViewPopulator(getActivity(), done, small, null);
         vp.setTagtodisplay(tagtodisplay);
         rv.setAdapter(vp);
-
 
 
         return v;
@@ -99,8 +93,9 @@ public class RecyclerFragment extends Fragment  {
     public void onDetach() {
         super.onDetach();
     }
-    public void refreshFragment(String tagtodisplayupdated){
-        RecyclerView rv = (RecyclerView)v.findViewById(R.id.fragmentrecyclerview);
+
+    public void refreshFragment(String tagtodisplayupdated) {
+        RecyclerView rv = (RecyclerView) v.findViewById(R.id.fragmentrecyclerview);
         if (small)
             rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         else
@@ -109,8 +104,6 @@ public class RecyclerFragment extends Fragment  {
         vp.setTagtodisplay(tagtodisplayupdated);
         rv.setAdapter(vp);
         Log.d("RECYCLERFRAGMENT", "REFRESHED");
-
-
 
 
     }

@@ -13,15 +13,39 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by ayfadia on 4/19/17.
  */
 
-public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
+public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder> {
     Context c;
     ArrayList<Task> t;
+    Context context;
+    Boolean small;
+    String tagtodisplay = "";
+    ViewPopulatorInterface myInterface;
+
+    public ViewPopulator(Context c, boolean done, boolean small, String tagtodisplay) {
+        super();
+        this.small = small;
+        TasksDBHelper helper = new TasksDBHelper(c);
+        if (tagtodisplay == null) {
+            this.tagtodisplay = "";
+        } else {
+            this.tagtodisplay = tagtodisplay;
+        }
+
+        if (done) {
+            t = helper.getDoneTasks(tagtodisplay);
+        } else {
+            t = helper.getPendingTasks(tagtodisplay);
+
+        }
+
+        this.c = c;
+        Log.d("VP", "ADAPTER CREATED");
+    }
 
     public void setTagtodisplay(String tagtodisplay) {
 
@@ -31,44 +55,12 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
 
     }
 
-    Context context;
-    Boolean small;
-    String tagtodisplay = "";
-    public interface ViewPopulatorInterface{
-        public void changed(int position);
-        public void clicked(Task t);
-    }
-    ViewPopulatorInterface myInterface;
-
-
-
-    public ViewPopulator(Context c, boolean done, boolean small, String tagtodisplay) {
-        super();
-        this.small = small;
-        TasksDBHelper helper = new TasksDBHelper(c);
-        if (tagtodisplay == null){
-            this.tagtodisplay= "";
-        }else{
-            this.tagtodisplay = tagtodisplay;
-        }
-
-        if (done){
-        t = helper.getDoneTasks(tagtodisplay);
-        }else{
-            t = helper.getPendingTasks(tagtodisplay);
-
-        }
-
-        this.c = c;
-        Log.d("VP", "ADAPTER CREATED");
-    }
-
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        if (small){
+        if (small) {
             v = LayoutInflater.from(c).inflate(R.layout.smalllistitem, null);
-        }else {
+        } else {
             v = LayoutInflater.from(c).inflate(R.layout.listitemcardstaggered, null);
         }
 
@@ -76,7 +68,6 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
         Log.d("VP", "ONCREATEVIEWHOLDER");
 
         return h;
-
 
 
     }
@@ -93,14 +84,14 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
         holder.visible = false;
         holder.tvdateadded.setText(sdf.format(t.get(position).dateadded));
         holder.tvdatepending.setText(sdf.format(t.get(position).datepending));
-        if(holder.tvpoints != null ){
+        if (holder.tvpoints != null) {
             holder.tvpoints.setText(String.valueOf(t.get(position).points));
         }
 
         int colour = t.get(position).colour;
         holder.rl.setBackgroundColor(Task.colours[colour]);
-        Log.d("BOUND", String.valueOf(t.get(position).colour)+" "+ String.valueOf(Task.colours[colour]));
-        myInterface = (ViewPopulatorInterface)c;
+        Log.d("BOUND", String.valueOf(t.get(position).colour) + " " + String.valueOf(Task.colours[colour]));
+        myInterface = (ViewPopulatorInterface) c;
 
         holder.rl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,24 +100,27 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
                 myInterface.clicked(t.get(position));
 
 
-
-
-
             }
         });
 
-        Log.d("VP", "BOUND"+String.valueOf(position));
+        Log.d("VP", "BOUND" + String.valueOf(position));
 
 
     }
-
-
 
     @Override
     public int getItemCount() {
         return t.size();
     }
-    public class Holder extends RecyclerView.ViewHolder{
+
+
+    public interface ViewPopulatorInterface {
+        public void changed(int position);
+
+        public void clicked(Task t);
+    }
+
+    public class Holder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView tvtask, tvcat, tvprimk, tvdateadded, tvdatepending, tvpoints;
         ImageButton bdelete, bdone;
@@ -134,28 +128,21 @@ public class ViewPopulator extends RecyclerView.Adapter<ViewPopulator.Holder>{
         RelativeLayout rl, cvrl;
 
 
-
-
-
-        public Holder(View v){
+        public Holder(View v) {
 
             super(v);
-            cv = (CardView)v.findViewById(R.id.cv);
-            tvtask = (TextView)v.findViewById(R.id.tvtask);
-            tvcat = (TextView)v.findViewById(R.id.tvcat);
-            tvprimk = (TextView)v.findViewById(R.id.primktv);
-            bdelete = (ImageButton)v.findViewById(R.id.deletebutton);
-            bdone = (ImageButton)v.findViewById(R.id.donebutton);
-            rl = (RelativeLayout)v.findViewById(R.id.relativel);
-            cvrl = (RelativeLayout)v.findViewById(R.id.cvrl);
-            tvdateadded = (TextView)v.findViewById(R.id.tvdateadded);
-            tvdatepending = (TextView)v.findViewById(R.id.tvdatepending);
-            tvpoints = (TextView)v.findViewById(R.id.pointstv);
+            cv = (CardView) v.findViewById(R.id.cv);
+            tvtask = (TextView) v.findViewById(R.id.tvtask);
+            tvcat = (TextView) v.findViewById(R.id.tvcat);
+            tvprimk = (TextView) v.findViewById(R.id.primktv);
+            bdelete = (ImageButton) v.findViewById(R.id.deletebutton);
+            bdone = (ImageButton) v.findViewById(R.id.donebutton);
+            rl = (RelativeLayout) v.findViewById(R.id.relativel);
+            cvrl = (RelativeLayout) v.findViewById(R.id.cvrl);
+            tvdateadded = (TextView) v.findViewById(R.id.tvdateadded);
+            tvdatepending = (TextView) v.findViewById(R.id.tvdatepending);
+            tvpoints = (TextView) v.findViewById(R.id.pointstv);
         }
-
-
-
-
 
 
     }

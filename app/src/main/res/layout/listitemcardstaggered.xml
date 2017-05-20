@@ -18,6 +18,7 @@
         app:cardUseCompatPadding="true"
         android:padding="3dp"
         android:id="@+id/cv"
+
         >
 
     <RelativeLayout
@@ -35,14 +36,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvtask"
-            android:textSize="30dp"
-            android:maxLines="100"
-            />
+            style="@style/SmallTaskTVStyle"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvcat"
-            android:layout_below="@+id/tvtask"/>
+            android:layout_below="@+id/tvtask"
+            style="@style/SmallTagTVStyle"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

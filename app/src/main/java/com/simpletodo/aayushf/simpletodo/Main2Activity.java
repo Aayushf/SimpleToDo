@@ -6,24 +6,26 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -31,16 +33,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
 import java.util.Random;
 
 public class Main2Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,   ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener{
+        implements NavigationView.OnNavigationItemSelectedListener, ViewPopulator.ViewPopulatorInterface, AdderDialog.AdderListener, ColourSelectionDialog.ColourSelectionDialogListener, NotifTimeSetterDialog.NotifTimeSetterListener , TagsViewPopulator.TagsInterface{
     ViewPager viewPager;
     TabLayout tabLayout;
     BottomSheetBehavior bsb;
     DialogFragment ad = new AdderDialog();
-
+    TabAdapter adp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,37 +49,38 @@ public class Main2Activity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        viewPager = (ViewPager)findViewById(R.id.vp);
-        tabLayout = (TabLayout)findViewById(R.id.tl);
-        final TabAdapter adp = new TabAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(R.id.vp);
+        tabLayout = (TabLayout) findViewById(R.id.tl);
+        adp = new TabAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adp);
         tabLayout.setupWithViewPager(viewPager);
-        NestedScrollView nsview = (NestedScrollView)findViewById(R.id.bsnsvmain3);
-        if (nsview != null){
+        NestedScrollView nsview = (NestedScrollView) findViewById(R.id.bsnsvmain3);
+        if (nsview != null) {
             bsb = BottomSheetBehavior.from(nsview);
             bsb.setPeekHeight(100);
             bsb.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         }
         updatePoints();
-        TextView tvquote = (TextView)findViewById(R.id.quotetvnav);
+        TextView tvquote = (TextView) findViewById(R.id.quotetvnav);
         Random r = new Random();
         tvquote.setText(Task.quotes[r.nextInt(1)]);
-        FloatingActionButton fabbsdone = (FloatingActionButton)findViewById(R.id.bottomsheetdonefab);
+        FloatingActionButton fabbsdone = (FloatingActionButton) findViewById(R.id.bottomsheetdonefab);
         fabbsdone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
-                helper.setDone(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()), !helper.getDone(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString())));
+                helper.setDone(Integer.parseInt(((TextView) findViewById(R.id.tvprimkbs)).getText().toString()), !helper.getDone(Integer.parseInt(((TextView) findViewById(R.id.tvprimkbs)).getText().toString())));
                 updatePoints();
                 adp.notifyDataSetChanged();
             }
         });
-        FloatingActionButton fabbsdelete = (FloatingActionButton)findViewById(R.id.bottomsheetdeletefab);
+        FloatingActionButton fabbsdelete = (FloatingActionButton) findViewById(R.id.bottomsheetdeletefab);
         fabbsdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);helper.deleteTaskFromDB(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
+                TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
+                helper.deleteTaskFromDB(Integer.parseInt(((TextView) findViewById(R.id.tvprimkbs)).getText().toString()));
                 updatePoints();
                 adp.notifyDataSetChanged();
             }
@@ -94,21 +96,23 @@ public class Main2Activity extends AppCompatActivity
                 adp.notifyDataSetChanged();
             }
         });
-        FloatingActionButton notifyfab = (FloatingActionButton)findViewById(R.id.notifyfab);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_pending);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_done);
+        FloatingActionButton notifyfab = (FloatingActionButton) findViewById(R.id.notifyfab);
         notifyfab.setOnClickListener(new View.OnClickListener() {
             @Override
 
             public void onClick(View v) {
                 Intent i = new Intent(Main2Activity.this, Main2Activity.class);
-                i.putExtra("primknotif", Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
+                i.putExtra("primknotif", Integer.parseInt(((TextView) findViewById(R.id.tvprimkbs)).getText().toString()));
                 i.putExtra("notifid", 01);
-                PendingIntent pi = PendingIntent.getActivity(Main2Activity.this,0,i, PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Builder notifbuilder = new NotificationCompat.Builder(Main2Activity.this).setSmallIcon(R.drawable.ic_check_black_24dp).setContentTitle(((TextView)findViewById(R.id.bottomsheettasktv)).getText().toString()).setContentText(((TextView)findViewById(R.id.bottomsheettag)).getText().toString()).setOngoing(true).addAction(R.drawable.ic_check_black_24dp, "Done", pi);
+                PendingIntent pi = PendingIntent.getActivity(Main2Activity.this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+                NotificationCompat.Builder notifbuilder = new NotificationCompat.Builder(Main2Activity.this).setSmallIcon(R.drawable.ic_check_black_24dp).setContentTitle(((TextView) findViewById(R.id.bottomsheettasktv)).getText().toString()).setContentText(((TextView) findViewById(R.id.bottomsheettag)).getText().toString()).setOngoing(true).addAction(R.drawable.ic_check_black_24dp, "Done", pi);
 
-                NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 manager.notify(01, notifbuilder.build());
                 NotifTimeSetterDialog d = new NotifTimeSetterDialog();
-                d.setTaskPK(Integer.parseInt(((TextView)findViewById(R.id.tvprimkbs)).getText().toString()));
+                d.setTaskPK(Integer.parseInt(((TextView) findViewById(R.id.tvprimkbs)).getText().toString()));
                 d.show(getFragmentManager(), "Pick Time");
 
             }
@@ -121,21 +125,11 @@ public class Main2Activity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
-
-        String[] alltags = helper.getAllCategories();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Main2Activity.this, R.layout.simpledrawerlistitem, R.id.drawerlisttv, alltags);
-        ListView lvdrawer = (ListView)findViewById(R.id.listindrawer);
-        lvdrawer.setAdapter(adapter);
-        lvdrawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adp.setTagtodisplay(((TextView) view.findViewById(R.id.drawerlisttv)).getText().toString());
-                adp.notifyDataSetChanged();
-                setTitle(((TextView) view.findViewById(R.id.drawerlisttv)).getText().toString());
-                Toast.makeText(Main2Activity.this, "CLICKED ON "+ String.valueOf(position)+" "+ ((TextView) view.findViewById(R.id.drawerlisttv)).getText().toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        TagsViewPopulator adapter = new TagsViewPopulator(Main2Activity.this);
+        RecyclerView rvdrawer = (RecyclerView) findViewById(R.id.rvindrawer);
+        rvdrawer.setLayoutManager(new LinearLayoutManager(Main2Activity.this));
+        rvdrawer.setAdapter(adapter);
+ //         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 //        navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -155,6 +149,7 @@ public class Main2Activity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main2, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -195,31 +190,30 @@ public class Main2Activity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void setDoneAndRemove(int primk, int notifid){
-        NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+    public void setDoneAndRemove(int primk, int notifid) {
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.cancel(notifid);
         TasksDBHelper helper = new TasksDBHelper(Main2Activity.this);
         helper.setDone(primk, true);
 
 
-
     }
+
     @Override
     public void clicked(Task t) {
         final java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("EEE - dd MMM ");
+        ((CardView)findViewById(R.id.bottomsheetcv)).setCardBackgroundColor(Task.colours[t.colour]);
+        ((TextView) findViewById(R.id.bottomsheettasktv)).setText(t.task);
+        ((TextView) findViewById(R.id.bottomsheettag)).setText(t.category);
+        ((TextView) findViewById(R.id.bottomsheettvdateadded)).setText("Added on " + format.format(t.dateadded));
+        ((TextView) findViewById(R.id.bottomsheettvdatepending)).setText("Due on " + format.format(t.datepending));
+        ((TextView) findViewById(R.id.tvprimkbs)).setText(String.valueOf(t.primk));
 
-        ((RelativeLayout)findViewById(R.id.bottomsheetrl)).setBackgroundColor(Task.colours[t.colour]);
-        ((TextView)findViewById(R.id.bottomsheettasktv)).setText(t.task);
-        ((TextView)findViewById(R.id.bottomsheettag)).setText(t.category);
-        ((TextView)findViewById(R.id.bottomsheettvdateadded)).setText("Added on "+format.format(t.dateadded));
-        ((TextView)findViewById(R.id.bottomsheettvdatepending)).setText("Due on "+format.format(t.datepending));
-        ((TextView)findViewById(R.id.tvprimkbs)).setText(String.valueOf(t.primk));
-
-        if (bsb !=null) {
+        if (bsb != null) {
             bsb.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
     }
-
 
 
     @Override
@@ -231,8 +225,8 @@ public class Main2Activity extends AppCompatActivity
 
     @Override
     public void onDialogPositiveClick(DialogFragment d) {
-        AdderDialog add = (AdderDialog)ad;
-        add.changeColour(((ColourSelectionDialog)d).getColourSelected());
+        AdderDialog add = (AdderDialog) ad;
+        add.changeColour(((ColourSelectionDialog) d).getColourSelected());
 
 
     }
@@ -241,28 +235,38 @@ public class Main2Activity extends AppCompatActivity
     public void timeSet(long time, int taskpk) {
         NotificationsDBHelper helper = new NotificationsDBHelper(Main2Activity.this);
         long l = helper.addNotifToDb(new TaskNotification(taskpk, time));
-        Intent i = new Intent(Main2Activity.this , Notifier.class);
+        Intent i = new Intent(Main2Activity.this, Notifier.class);
         i.putExtra("notifprimk", l);
 
-        PendingIntent pi = PendingIntent.getBroadcast(Main2Activity.this , 0,i, 0);
-        AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pi = PendingIntent.getBroadcast(Main2Activity.this, 0, i, 0);
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, time, pi);
 
     }
+
     @Override
     public void changed(int position) {
 
     }
-    public void updatePoints(){
-        TextView tvpoints = (TextView)findViewById(R.id.pointstvdrawer);
 
-        TasksDBHelper h  = new TasksDBHelper(Main2Activity.this);
+    public void updatePoints() {
+        TextView tvpoints = (TextView) findViewById(R.id.pointstvdrawer);
+
+        TasksDBHelper h = new TasksDBHelper(Main2Activity.this);
         tvpoints.setText(String.valueOf(h.getTotalPoints()));
 
     }
 
 
+    @Override
+    public void tagclicked(String tag) {
+        adp.setTagtodisplay(tag);
+        adp.notifyDataSetChanged();
+        setTitle(tag);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_pending);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_done);
 
+    }
 }
 
 

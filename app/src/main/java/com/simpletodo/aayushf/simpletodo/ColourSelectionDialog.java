@@ -13,21 +13,18 @@ import android.util.Log;
  */
 
 public class ColourSelectionDialog extends DialogFragment {
-    public interface ColourSelectionDialogListener{
-        public void onDialogPositiveClick(DialogFragment d);
-    }
-    ColourSelectionDialogListener mListener;
     public int colourselected;
+    ColourSelectionDialogListener mListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mListener = (ColourSelectionDialogListener)context;
+        mListener = (ColourSelectionDialogListener) context;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder  builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Choose Colour");
         builder.setPositiveButton("Choose", new DialogInterface.OnClickListener() {
             @Override
@@ -44,23 +41,21 @@ public class ColourSelectionDialog extends DialogFragment {
                 mListener.onDialogPositiveClick(ColourSelectionDialog.this);
 
 
-
             }
         };
 
-        builder.setItems(Task.coloursnames,ocl );
-
-
-
-
-
-
+        builder.setItems(Task.coloursnames, ocl);
 
 
         return builder.create();
 
     }
-    public int getColourSelected(){
+
+    public int getColourSelected() {
         return colourselected;
+    }
+
+    public interface ColourSelectionDialogListener {
+        public void onDialogPositiveClick(DialogFragment d);
     }
 }
